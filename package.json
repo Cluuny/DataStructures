@@ -1,5 +1,5 @@
 {
-	"name": "dataestructures",
+	"name": "datatructures",
 	"version": "1.0.0",
 	"description": "Package to recover all the data estrucutres for backend JavaScript development",
 	"main": "index.js",
