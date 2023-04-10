@@ -5,8 +5,11 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"test": "echo \"That's funny\""
+		"test": "jest ./test/DoubleLinkedList.test.js"
 	},
 	"author": "Cluuny",
-	"license": "ISC"
+	"license": "ISC",
+	"devDependencies": {
+		"jest": "^29.5.0"
+	}
 }

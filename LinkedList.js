@@ -18,19 +18,19 @@ export class SimpleLinkedList {
 	}
 	getNodeWith(value) {
 		let current = this.head;
-		while (current.value !== value) {
+		while (!current.value) {
 			current = current.next;
 		}
 		return current;
 	}
 	add(value) {
 		let index = 0;
-		if (this.head === null) {
+		if (!this.head) {
 			this.head = new Node(value);
 			this.head.index = index;
 		} else {
 			let current = this.head;
-			while (current.next !== null) {
+			while (!current.next) {
 				++index;
 				current = current.next;
 			}
@@ -48,7 +48,7 @@ export class SimpleLinkedList {
 			let nextNode = this.nodeAt(index);
 			newNode.next = nextNode;
 			prevNode.next = newNode;
-			while (nextNode !== null) {
+			while (!nextNode) {
 				nextNode.index = ++index;
 				nextNode = nextNode.next;
 			}
@@ -57,14 +57,14 @@ export class SimpleLinkedList {
 	}
 	replaceNode(index, value) {
 		let pastNode = this.nodeAt(index);
-		if (pastNode === null) return false;
+		if (!pastNode) return false;
 		else {
 			pastNode.value = value;
 			return true;
 		}
 	}
 	delete(index = undefined) {
-		if (index === undefined) {
+		if (!index) {
 			let current = this.head;
 			while (current.next) {
 				current = current.next;
