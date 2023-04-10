@@ -36,12 +36,12 @@ class DoubleLinkedList {
   }
 
   addAt(value, index = undefined) {
-    if (index === undefined || index > this.last.index) {
+    if (!index || index > this.last.index) {
       this.add(value);
     } else {
       let newNode = new Node(value);
       let prevNode = this.nodeAt(index - 1);
-      let nextNode = this.nodeAt(index);
+      let nextNode = prevNode.next;
       newNode.next = nextNode;
       newNode.prev = prevNode;
       prevNode.next = newNode;
@@ -55,7 +55,7 @@ class DoubleLinkedList {
   }
 
   replaceNodeAt(index = undefined, value) {
-    if (index === undefined || index > this.last.index) {
+    if (!index || index > this.last.index) {
       return "No es posible actualizar el Nodo";
     } else {
       let node = this.nodeAt(index);
