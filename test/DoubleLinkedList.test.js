@@ -1,6 +1,5 @@
 import { DoubleLinkedList } from '../DoubleLinkedList.js';
 describe("DoubleLinkedList", () => {
-  console.log(new DoubleLinkedList)
   it("should add a node to the end of the list", () => {
     const list = new DoubleLinkedList();
     list.add(1);
