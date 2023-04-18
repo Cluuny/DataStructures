@@ -1,9 +1,9 @@
 # DataStructures
 Dentro de este repositorio encontrarás practicas e implementaciones para algunas estructuras de datos importantes como:
-* Arrays
-* Listas Enlazadas
+* ✅ Arrays
+* ✅ Listas Enlazadas
+* ✅ Tablas de Hash
 * Maps y Sets
-* Tablas de Hash
 * Pilas y Colas
 * Grafos y Arboles
 * Heaps
