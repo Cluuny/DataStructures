@@ -30,7 +30,7 @@ class SimpleLinkedList {
       this.head.index = index;
     } else {
       let current = this.head;
-      while (!current.next) {
+      while (current.next !== null) {
         ++index;
         current = current.next;
       }
@@ -85,4 +85,4 @@ class SimpleLinkedList {
     }
   }
 }
-export { SimpleLinkedList }
+export { Node, SimpleLinkedList };
