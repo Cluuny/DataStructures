@@ -1,16 +1,3 @@
-const data = [
-  "apple",
-  "banana",
-  "cherry",
-  "dog",
-  "elephant",
-  "frog",
-  "giraffe",
-  "horse",
-  "ice cream",
-  "jellyfish",
-];
-
 class HashTable {
   constructor(length) {
     this.table = new Array(length);
@@ -35,6 +22,7 @@ class HashTable {
       }
       this.table[index] = value;
     }
+    return index;
   }
   read(index) {
     return this.table[index];
@@ -44,19 +32,17 @@ class HashTable {
   }
   delete(value) {
     let index = this.hash(value);
+    let count = 0;
     if (value === this.table[index]) {
       this.table[index] = undefined;
     } else {
       while (value !== this.table[index]) {
         index = this.reHash(index);
+        ++count;
+        if (count >= this.table.length) return false;
       }
       this.table[index] = undefined;
     }
   }
 }
-let hashTable = new HashTable(10);
-for (let index = 0; index < data.length; index++) {
-  hashTable.add(data[index]);
-}
-console.log(hashTable.table);
-console.log(hashTable.read(0));
+export { HashTable };
