@@ -3,7 +3,7 @@ Dentro de este repositorio encontrarás practicas e implementaciones para alguna
 * ✅ ✅Arrays
 * ✅ ✅Listas Enlazadas
 * ✅ ✅Tablas de Hash
+* ✅ ✅Pilas y Colas
 * Maps y Sets
-* Pilas y Colas
 * Grafos y Arboles
 * Heaps
