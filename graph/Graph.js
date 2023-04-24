@@ -63,12 +63,3 @@ class Graph {
   }
 }
 export { Graph };
-let newGraph = new Graph();
-newGraph.addNode(1);
-newGraph.addNode(2);
-newGraph.addNode(3);
-newGraph.addNode(2);
-newGraph.addConnectionBetween(2, 3);
-newGraph.addConnectionBetween(2, 2);
-newGraph.addConnectionBetween(1, 2);
-console.log(newGraph.graph);
