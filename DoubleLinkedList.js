@@ -81,4 +81,4 @@ class DoubleLinkedList {
   }
 }
 
-export { DoubleLinkedList }
+export { DoubleLinkedList };
