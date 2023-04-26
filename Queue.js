@@ -13,7 +13,7 @@ class Queue {
     return this.queue[0];
   }
   getTail() {
-    return this.tail
+    return this.tail;
   }
   reHead(value) {
     if (!value) {
@@ -23,7 +23,7 @@ class Queue {
     return true;
   }
   dequeue() {
-    return this.queue.shift() === undefined ? true : false;
+    return this.queue.shift();
   }
   size() {
     return this.queue.length;

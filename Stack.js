@@ -38,18 +38,21 @@ class Stack {
   }
   delete(index) {
     if (index === undefined || index > this.stack.length) {
-      this.stack.pop();
-      return true;
+      return this.stack.pop();
     } else {
       let arrAux = [];
       for (let i = this.stack.length - 1; i > index; i--) {
         arrAux.push(this.stack[i]);
         this.stack.pop();
       }
-      this.stack.pop();
+      let deletedData = this.stack.pop();
       arrAux = arrAux.reverse();
       this.stack.push(...arrAux);
-      return true;
+      return deletedData;
     }
   }
+  isEmpty() {
+    return this.queue.length === 0;
+  }
 }
+export { Stack };

@@ -1,50 +1,62 @@
+import { Queue } from "./../Queue.js";
 class Graph {
   constructor() {
     this.graph = new Map();
   }
   addNode(value) {
     if (!this.graph.has(value)) {
-      this.graph.set(value, new Array());
+      this.graph.set(value, new Map());
       return true;
     }
     return false;
   }
-  addConnectionBetween(nodeA, nodeB) {
+  addConnectionBetween(nodeA, nodeB, weight = 0) {
     if (nodeA === nodeB) {
-      this.cycle(nodeA);
+      this._cycle(nodeA, weight);
     } else if (this.graph.has(nodeA) && this.graph.has(nodeB)) {
       const connectA = this.graph.get(nodeA);
       const connectB = this.graph.get(nodeB);
-      connectA.push(nodeB);
-      connectB.push(nodeA);
+      connectA.set(nodeB, weight);
+      connectB.set(nodeA, weight);
     } else {
       this.addNode(nodeA);
       this.addNode(nodeB);
-      this.addConnectionBetween(nodeA, nodeB);
+      this.addConnectionBetween(nodeA, nodeB, weight);
     }
     return true;
   }
-  cycle(node) {
+  _cycle(node, weight = 0) {
     if (this.graph.has(node)) {
-      const connectA = this.graph.get(node);
-      connectA.push(node);
+      const connections = this.graph.get(node);
+      connections.set(node, weight);
+      return true;
+    }
+    return false;
+  }
+  updateWeight(nodeA, nodeB, weight = 0) {
+    if (this.graph.has(nodeA) && this.graph.has(nodeB)) {
+      let connectA = this.graph.get(nodeA);
+      let connectB = this.graph.get(nodeB);
+      if (!connectA.has(nodeB) && !connectB.has(nodeA)) {
+        return this.addConnectionBetween(nodeA, nodeB, weight);
+      }
+      connectA.set(nodeB, weight);
+      connectB.set(nodeA, weight);
       return true;
     }
     return false;
   }
   getConnections(node) {
-    if (this.graph.has(node)) {
-      return this.graph.get(node);
-    }
-    return false;
+    return this.graph.has(node)
+      ? new Array(...this.graph.get(node))
+      : undefined;
   }
   deleteNode(value) {
     if (this.graph.has(value)) {
       this.graph.delete(value);
-      let nodeConnections = this.graph.values();
-      for (const nodeConnection of nodeConnections) {
-        if (nodeConnection.includes(value)) {
-          nodeConnection.splice(nodeConnection.indexOf(value), 1);
+      for (const connections of this.graph.values()) {
+        if (connections.has(value)) {
+          connections.delete(value);
         }
       }
       return true;
@@ -55,11 +67,51 @@ class Graph {
     if (this.graph.has(nodeA) && this.graph.has(nodeB)) {
       let connectA = this.graph.get(nodeA);
       let connectB = this.graph.get(nodeB);
-      connectA.splice(connectA.indexOf(nodeB), 1);
-      connectB.splice(connectB.indexOf(nodeA), 1);
+      if (connectA.has(nodeB)) {
+        connectA.delete(nodeB);
+      }
+      if (connectB.has(nodeA)) {
+        connectB.delete(nodeA);
+      }
       return true;
     }
     return false;
+  }
+  bfs(startNode, targetNode) {
+    const bfs = {
+      queue: new Queue(),
+      visitedNodes: new Set(),
+    };
+    bfs.visitedNodes.add(startNode);
+    bfs.queue.enqueue(startNode);
+    while (!bfs.queue.isEmpty()) {
+      const actualNode = bfs.queue.dequeue();
+      if (actualNode === targetNode) return true;
+      const actualNeighbors = this.graph.get(actualNode);
+      for (const neighbor of actualNeighbors.keys()) {
+        if (!bfs.visitedNodes.has(neighbor)) {
+          bfs.visitedNodes.add(neighbor);
+          bfs.queue.enqueue(neighbor);
+        }
+      }
+    }
+    return false;
+  }
+  dfs(startNode, targetNode) {
+    const visited = new Set();
+    const dfsHelper = (node) => {
+      visited.add(node);
+      if (node === targetNode) return true;
+      const neighbors = this.graph.get(node);
+      for (const neighbor of neighbors.keys()) {
+        if (!visited.has(neighbor)) {
+          const found = dfsHelper(neighbor);
+          if (found) return true;
+        }
+      }
+      return false;
+    };
+    return dfsHelper(startNode);
   }
 }
 export { Graph };
