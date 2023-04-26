@@ -5,6 +5,9 @@ class Queue {
     this.tail = undefined;
   }
   enqueue(value) {
+    if (!value) {
+      return false;
+    }
     this.queue[this.queue.length] = value;
     this.tail = value;
     return true;
@@ -23,7 +26,7 @@ class Queue {
     return true;
   }
   dequeue() {
-    return this.queue.shift();
+    return this.isEmpty() ? false : this.queue.shift();
   }
   size() {
     return this.queue.length;

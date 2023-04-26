@@ -1,7 +1,9 @@
 import { Queue } from "./../Queue.js";
 class Graph {
-  constructor() {
+  constructor({ isDirected = false } = {}) {
     this.graph = new Map();
+    this.isDirected = isDirected;
+    this._DEFAULT_WEIGHT = 0;
   }
   addNode(value) {
     if (!this.graph.has(value)) {
@@ -10,14 +12,23 @@ class Graph {
     }
     return false;
   }
-  addConnectionBetween(nodeA, nodeB, weight = 0) {
+  addConnectionBetween(nodeA, nodeB, weight = this._DEFAULT_WEIGHT) {
     if (nodeA === nodeB) {
-      this._cycle(nodeA, weight);
+      this._handleCycle(nodeA, weight);
     } else if (this.graph.has(nodeA) && this.graph.has(nodeB)) {
-      const connectA = this.graph.get(nodeA);
-      const connectB = this.graph.get(nodeB);
-      connectA.set(nodeB, weight);
-      connectB.set(nodeA, weight);
+      const connectionsA = this.graph.get(nodeA);
+      const connectionsB = this.graph.get(nodeB);
+      if (this.isDirected) {
+        this._addDirectedConnection(connectionsA, nodeB, weight);
+      } else {
+        this._addUndirectedConnection(
+          connectionsA,
+          connectionsB,
+          nodeA,
+          nodeB,
+          weight
+        );
+      }
     } else {
       this.addNode(nodeA);
       this.addNode(nodeB);
@@ -25,7 +36,16 @@ class Graph {
     }
     return true;
   }
-  _cycle(node, weight = 0) {
+  _addDirectedConnection(whereConnect, node, weight) {
+    whereConnect.set(node, weight);
+    return true;
+  }
+  _addUndirectedConnection(connectionsA, connectionsB, nodeA, nodeB, weight) {
+    connectionsA.set(nodeB, weight);
+    connectionsB.set(nodeA, weight);
+    return true;
+  }
+  _handleCycle(node, weight = 0) {
     if (this.graph.has(node)) {
       const connections = this.graph.get(node);
       connections.set(node, weight);
@@ -33,26 +53,25 @@ class Graph {
     }
     return false;
   }
+  getConnections(node) {
+    return this.graph.has(node) ? this.graph.get(node) : undefined;
+  }
   updateWeight(nodeA, nodeB, weight = 0) {
-    if (this.graph.has(nodeA) && this.graph.has(nodeB)) {
+    const nodeAExists = this.graph.has(nodeA);
+    const nodeBExists = this.graph.has(nodeB);
+    if (!nodeAExists && !nodeBExists) {
+      return this.addConnectionBetween(nodeA, nodeB, weight);
+    } else {
       let connectA = this.graph.get(nodeA);
       let connectB = this.graph.get(nodeB);
-      if (!connectA.has(nodeB) && !connectB.has(nodeA)) {
-        return this.addConnectionBetween(nodeA, nodeB, weight);
-      }
       connectA.set(nodeB, weight);
       connectB.set(nodeA, weight);
       return true;
     }
-    return false;
-  }
-  getConnections(node) {
-    return this.graph.has(node)
-      ? new Array(...this.graph.get(node))
-      : undefined;
   }
   deleteNode(value) {
-    if (this.graph.has(value)) {
+    const nodeExists = this.graph.has(value);
+    if (nodeExists) {
       this.graph.delete(value);
       for (const connections of this.graph.values()) {
         if (connections.has(value)) {
@@ -64,7 +83,9 @@ class Graph {
     return false;
   }
   deleteConnectionBetween(nodeA, nodeB) {
-    if (this.graph.has(nodeA) && this.graph.has(nodeB)) {
+    const nodeAExists = this.graph.has(nodeA);
+    const nodeBExists = this.graph.has(nodeB);
+    if (nodeAExists && nodeBExists) {
       let connectA = this.graph.get(nodeA);
       let connectB = this.graph.get(nodeB);
       if (connectA.has(nodeB)) {

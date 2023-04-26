@@ -1,2 +1,2 @@
 import { Graph } from "./Graph.js";
-let graph = new Graph();
+let graph = new Graph({ isDirected: false });
