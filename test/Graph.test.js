@@ -83,7 +83,7 @@ describe("Graph_class", () => {
     graph.addConnectionBetween("A", "B");
     graph.addConnectionBetween("B", "C");
     graph.addConnectionBetween("C", "D");
-    const result = graph.bfs("A", "D");
+    const result = graph.breadthFirstSearch("A", "D");
     expect(result).toBe(true);
   });
 });

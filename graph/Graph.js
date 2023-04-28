@@ -1,16 +1,22 @@
 import { Queue } from "./../Queue.js";
+import { Stack } from "./../Stack.js";
 class Graph {
   constructor({ isDirected = false } = {}) {
     this.graph = new Map();
     this.isDirected = isDirected;
     this._DEFAULT_WEIGHT = 0;
   }
-  addNode(value) {
-    if (!this.graph.has(value)) {
-      this.graph.set(value, new Map());
-      return true;
+  addNode(...values) {
+    const booleanArr = [];
+    for (const node of values) {
+      if (!this.graph.has(node)) {
+        this.graph.set(node, new Map());
+        booleanArr.push(true);
+      } else {
+        booleanArr.push(false);
+      }
     }
-    return false;
+    return !booleanArr.includes(false);
   }
   addConnectionBetween(nodeA, nodeB, weight = this._DEFAULT_WEIGHT) {
     if (nodeA === nodeB) {
@@ -98,7 +104,7 @@ class Graph {
     }
     return false;
   }
-  bfs(startNode, targetNode) {
+  breadthFirstSearch(startNode, targetNode) {
     const bfs = {
       queue: new Queue(),
       visitedNodes: new Set(),
@@ -118,21 +124,25 @@ class Graph {
     }
     return false;
   }
-  dfs(startNode, targetNode) {
-    const visited = new Set();
-    const dfsHelper = (node) => {
-      visited.add(node);
-      if (node === targetNode) return true;
-      const neighbors = this.graph.get(node);
+  depthFirstSearch(startNode, targetNode) {
+    const dfsHelper = {
+      stack: new Stack(),
+      visitedNodes: new Set(),
+    };
+    dfsHelper.visitedNodes.add(startNode);
+    dfsHelper.stack.add(startNode);
+    while (!dfsHelper.stack.isEmpty()) {
+      const actualNode = dfsHelper.stack.delete();
+      if (actualNode === targetNode) return true;
+      const neighbors = this.graph.get(actualNode);
       for (const neighbor of neighbors.keys()) {
-        if (!visited.has(neighbor)) {
-          const found = dfsHelper(neighbor);
-          if (found) return true;
+        if (!dfsHelper.visitedNodes.has(neighbor)) {
+          dfsHelper.visitedNodes.add(neighbor);
+          dfsHelper.stack.add(neighbor);
         }
       }
-      return false;
-    };
-    return dfsHelper(startNode);
+    }
+    return false;
   }
 }
 export { Graph };
