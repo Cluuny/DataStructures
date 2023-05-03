@@ -86,4 +86,36 @@ describe("Graph_class", () => {
     const result = graph.breadthFirstSearch("A", "D");
     expect(result).toBe(true);
   });
+
+  // Tests adding a single node to the graph.
+  it("test_add_node", () => {
+    const graph = new Graph();
+    const result = graph.addNode("A");
+    expect(result).toBe(true);
+    expect(graph.graph.size).toBe(1);
+  });
+
+  // Tests adding multiple nodes to the graph.
+  it("test_add_multiple_nodes", () => {
+    const graph = new Graph();
+    const result = graph.addNode("A", "B", "C");
+    expect(result).toBe(true);
+    expect(graph.graph.size).toBe(3);
+  });
+
+  // Tests adding a node that already exists in the graph.
+  it("test_add_duplicate_node", () => {
+    const graph = new Graph();
+    graph.addNode("A");
+    const result = graph.addNode("A");
+    expect(result).toBe(false);
+    expect(graph.graph.size).toBe(1);
+  });
+
+  // Tests adding a connection between two nodes, one or both of which do not exist in the graph.
+  it("test_add_connection_between_nonexistent_nodes", () => {
+    const graph = new Graph();
+    const result = graph.addConnectionBetween("A", "B");
+    expect(result).toBe(true);
+  });
 });

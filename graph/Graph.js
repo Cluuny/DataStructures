@@ -5,6 +5,7 @@ class Graph {
     this.graph = new Map();
     this.isDirected = isDirected;
     this._DEFAULT_WEIGHT = 0;
+    this.size = new Array(this.graph.keys()).length;
   }
   addNode(...values) {
     const booleanArr = [];
@@ -144,5 +145,59 @@ class Graph {
     }
     return false;
   }
+  findShortWayDIJSKSTRA(rootNode, targetNode) {
+    const unVisitedNodes = new Map();
+    const visitedNodes = new Map();
+    const previousNodes = new Map();
+    for (const node of this.graph.keys()) {
+      unVisitedNodes.set(node, node === rootNode ? 0 : Infinity);
+    }
+    let hasNeighbors = true;
+    while (hasNeighbors) {
+      let minDistance = Infinity;
+      let actualNode = null;
+      for (const node of unVisitedNodes.keys()) {
+        if (unVisitedNodes.get(node) < minDistance) {
+          minDistance = unVisitedNodes.get(node);
+          actualNode = node;
+        }
+      }
+      visitedNodes.set(actualNode, unVisitedNodes.get(actualNode));
+      if (actualNode === targetNode) break;
+      let neighbors = this.graph.get(actualNode);
+      if (!neighbors || neighbors.size === 0) {
+        hasNeighbors = false;
+      } else {
+        for (const neighbor of neighbors.keys()) {
+          if (
+            visitedNodes.get(actualNode) + neighbors.get(neighbor) <
+            unVisitedNodes.get(neighbor)
+          ) {
+            unVisitedNodes.set(
+              neighbor,
+              visitedNodes.get(actualNode) + neighbors.get(neighbor)
+            );
+            previousNodes.set(neighbor, actualNode);
+          }
+        }
+      }
+      unVisitedNodes.delete(actualNode);
+    }
+    const shortWay = new Array();
+    let currentNode = targetNode;
+    while (currentNode !== rootNode) {
+      shortWay.push({
+        node: currentNode,
+        distance: visitedNodes.get(currentNode),
+      });
+      currentNode = previousNodes.get(currentNode);
+    }
+    shortWay.push({
+      node: rootNode,
+      distance: visitedNodes.get(rootNode),
+    });
+    return shortWay.reverse();
+  }
+  // bellmanFord(rootNode, targetNode) {}
 }
 export { Graph };
