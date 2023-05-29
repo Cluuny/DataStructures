@@ -4,6 +4,6 @@ Dentro de este repositorio encontrarás practicas e implementaciones para alguna
 * ✅ ✅Listas Enlazadas
 * ✅ ✅Tablas de Hash
 * ✅ ✅Pilas y Colas
-* Maps y Sets
-* Grafos y Arboles
-* Heaps
+* ✅ ✅Maps y Sets
+* Arboles
+* Grafos
